@@ -73,6 +73,7 @@ module slot_game::slot_game {
         revealed: bool,
         values: vector<u8>,
     }
+    
 
     #[event]
     struct SlotGameResultEvent has drop, store {
@@ -324,6 +325,13 @@ module slot_game::slot_game {
         ( game.id, game.slots, game.items_config_id )
     }
 
+    // Returns slot numbers in the commitment of a game
+    #[view]
+    public fun get_slots_in_commitment(game_id: u64): (vector<u8>) acquires RandomnessCommitmentExt {
+        let commitment = borrow_global<RandomnessCommitmentExt>(get_game_address(game_id));
+        ( commitment.values )
+    }
+
     // ========================= Helper functions ========================= 
     
     fun assert_owner(sender: &signer) {
@@ -550,12 +558,16 @@ module slot_game::slot_game {
         create_game(user, amount_to_play, items_id);
 
         make_random_slot_commit(game_id);
+
+        let slot_numbers_vector = vector<u8>[1, 9 , 11];
+        assert!(get_slots_in_commitment(game_id) == slot_numbers_vector, 0);
+
         make_random_slot_reveal(game_id);
 
         let ( _, slots, _) = get_game(game_id);
         debug::print(&slots);
-        assert!(slots.slot_1 == 1, 0);
-        assert!(slots.slot_2 == 9, 1);
-        assert!(slots.slot_3 == 11, 2);
+        assert!(slots.slot_1 == 1, 1);
+        assert!(slots.slot_2 == 9, 2);
+        assert!(slots.slot_3 == 11, 3);
     }
 } 
