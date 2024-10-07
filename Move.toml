@@ -1,0 +1,21 @@
+[package]
+name = "slot_game"
+version = "4.0.0"
+authors = []
+
+[addresses]
+slot_game = "_"
+
+[dev-addresses]
+slot_game = "0x100"
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+[dependencies.AptosTokenObjects]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-token-objects"
+
+[dev-dependencies]
